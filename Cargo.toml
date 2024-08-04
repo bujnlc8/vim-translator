@@ -1,0 +1,27 @@
+[package]
+name = "qiniu-upload-util"
+version = "0.1.0"
+edition = "2021"
+description = "A CLI to upload file to qiniu Kodo"
+authors = ["linghaihui <75124771@qq.com>"]
+license = "MIT"
+repository = "https://github.com/bujnlc8/qiniu-upload-util"
+keywords = ["qiniu", "qiniu-upload", "progress-bar"]
+exclude = ["snapshots", "Makefile"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+anyhow = "1.0.86"
+qiniu-uploader = "0.1"
+tokio = { version = "1.39.2", features = ["full"] }
+clap = { version = "4.5.13", features = ["derive"] }
+clap_complete = "4.5.12"
+colored = "2.1.0"
+qrcode = "0.14.1"
+
+[profile.release]
+lto = true
+opt-level = "z"
+panic = "abort"
+strip = true
+codegen-units = 1
