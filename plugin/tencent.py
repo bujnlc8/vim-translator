@@ -42,11 +42,7 @@ def _get_result(query):
         'model_category': 'normal',
         'text_domain': '',
         'source': {
-            'lang': 'en',
             'text_list': [query],
-        },
-        'target': {
-            'lang': 'zh',
         },
     }
 
