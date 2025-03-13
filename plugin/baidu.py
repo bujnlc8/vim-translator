@@ -1,5 +1,3 @@
-# coding=utf-8
-
 import base64
 import ctypes
 import json
@@ -64,7 +62,7 @@ def sign(r):
     if o is None:
         t = len(r)
         if t > 30:
-            r = '' + r[:10] + r[t // 2 - 5: 5 + t // 2] + r[-10:]
+            r = '' + r[:10] + r[t // 2 - 5 : 5 + t // 2] + r[-10:]
     else:
         e = re.split(r'/[\ud800-\udbff][\udc00-\udfff]/', r)
         C = 0
@@ -78,7 +76,7 @@ def sign(r):
             C += 1
         g = len(f)
         if g > 30:
-            r = ''.join(f[:10]) + ''.join(f[g // 2: g // 2 + 5]) + ''.join(f[-10:])
+            r = ''.join(f[:10]) + ''.join(f[g // 2 : g // 2 + 5]) + ''.join(f[-10:])
     try:
         m = int(d[0])
     except:
@@ -147,7 +145,7 @@ headers = {
     'Sec-Fetch-Dest': 'empty',
     'Referer': 'https://fanyi.baidu.com/',
     'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-    'Cookie': 'BAIDUID_BFESS=' + BAIDUID_BFESS + '; REALTIME_TRANS_SWITCH=1; FANYI_WORD_SWITCH=1'
+    'Cookie': 'BAIDUID_BFESS=' + BAIDUID_BFESS + '; REALTIME_TRANS_SWITCH=1; FANYI_WORD_SWITCH=1',
 }
 
 
@@ -158,7 +156,8 @@ def get_result(query, is_zh=''):
 
 def get_zh(word):
     url = 'https://zd.hwxnet.com/search.do?{}'.format(
-        parse.urlencode({'keyword': word, 'timestamp': int(1000 * time.time())}))
+        parse.urlencode({'keyword': word, 'timestamp': int(1000 * time.time())})
+    )
     req = request.Request(url)
     res = request.urlopen(req)
     if res.getcode() != 200:
@@ -191,13 +190,11 @@ def _get_result(query, is_zh=''):
         'simple_means_flag': '3',
         'sign': sign_data,
         'token': TOKEN,
-        'domain': 'common'
+        'domain': 'common',
     }
     try:
-        url = 'https://fanyi.baidu.com/v2transapi?' + \
-            parse.urlencode({'from': fr, 'to': to})
-        req = request.Request(url, data=parse.urlencode(
-            data).encode('utf-8'), headers=headers)
+        url = 'https://fanyi.baidu.com/v2transapi?' + parse.urlencode({'from': fr, 'to': to})
+        req = request.Request(url, data=parse.urlencode(data).encode('utf-8'), headers=headers)
         res = request.urlopen(req)
         if res.getcode() != 200:
             return 'Err:返回异常[{}]'.format(res.getcode())
@@ -213,11 +210,11 @@ def _get_result(query, is_zh=''):
                 if detail['chenyu']:
                     c = detail['chenyu']
                     if 'from ' in c:
-                        result.append('\n'.join(
-                            ['pinyin: ' + c['pinyin'], '释义: ' + c['explain'], '出处: ' + c['from ']]))
-                    else:
                         result.append(
-                            '\n'.join(['pinyin: ' + c['pinyin'], '释义: ' + c['explain']]))
+                            '\n'.join(['pinyin: ' + c['pinyin'], '释义: ' + c['explain'], '出处: ' + c['from ']])
+                        )
+                    else:
+                        result.append('\n'.join(['pinyin: ' + c['pinyin'], '释义: ' + c['explain']]))
                 elif detail['means']:
                     m = detail['means'][0]
                     result.append('pinyin: ' + m['pinyin'])

@@ -1,4 +1,6 @@
-# 一个有用的翻译 VIM 插件, 提供有道和百度两种选择
+# 一个有用的翻译 VIM 插件, 提供百度和腾讯两种选择
+
+**⚠️ 由于有道翻译更改了签名的方法导致接口调用出错，懒得去逆向了，因此移除有道翻译，新增了更友好的腾讯翻译。如果在配置文件指定了翻译渠道为`youdao`，请更换成`baidu`或`tencent`**
 
 先上图：
 
@@ -44,15 +46,13 @@ OR
 
 - `let g:translator_cache_path='~/.cache'`，缓存路径，默认`expand('<sfile>:p:h').'/.cache'`。
 
-- `let g:translator_channel='youdao'`，查询通道，默认`youdao`, 也可切到`baidu`。
+- `let g:translator_channel='baidu'`，查询通道，默认`baidu`, 也可切到`tencent`。
 
 - `let g:translator_outputype='popup'`, 结果输出方式，如果支持弹窗（vim-8.2 及以上）默认弹窗展示，否则输出到底部，也可以设置成`echo`显式开启输出到底部，弹窗模式下按`z`关闭弹窗。`echo` 模式下，如果结果长度大于 200，会输出到`fixquick`窗口中。
 
 ## 后记
 
 在写插件的过程中借鉴了[vim-youdao-translater](https://github.com/ianva/vim-youdao-translater) 这个项目，特此表示感谢 ♥️。
-
-但在使用上述插件的过程中经常出现查询出错的情况，而且使用的接口也已经比较老了，遂萌生了重写插件的念头, 本插件根据有道翻译[官网](https://fanyi.youdao.com/)最新接口封装，大大减小了出错的几率, 相当智能。写完之后觉得百度翻译好像也还可以，于是又加上了百度翻译。可以通过`let g:translator_channel='baidu'`来切换到百度翻译。
 
 在使用过程中如果出现问题，欢迎在 Issues 提出。
 

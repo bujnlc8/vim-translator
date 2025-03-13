@@ -16,10 +16,10 @@ if g:translator_outputype == 'popup' && !s:has_popup
 endif
 
 if !exists('g:translator_channel')
-    let g:translator_channel = 'youdao'
+    let g:translator_channel = 'baidu'
 endif
 
-if g:translator_channel != 'youdao' &&  g:translator_channel != 'baidu'
+if g:translator_channel != 'tencent' &&  g:translator_channel != 'baidu'
     echoerr '[Translator] g:translator_channel config error'
 endif
 
