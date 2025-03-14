@@ -102,7 +102,6 @@ function! s:create_popup_nvim(words, result)
                 \}
 
     let l:result = []
-    echo a:result
     for x in split(a:result, "\n")
         call add(l:result, x)
     endfor
