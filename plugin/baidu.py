@@ -223,11 +223,25 @@ def _get_result(query, is_zh=''):
         else:
             if 'dict_result' in res and fr == 'en':
                 for x in res['dict_result']['simple_means']['symbols']:
+                    phs = []
+                    if 'ph_en' in x and x['ph_en']:
+                        phs.append(x['ph_en'])
+                    if 'ph_am' in x and x['ph_am']:
+                        phs.append(x['ph_am'])
+                    if 'ph_other' in x and x['ph_other']:
+                        phs.append(x['ph_other'])
+                    if phs:
+                        result.append('｜'.join(phs))
                     for y in x['parts']:
                         if 'part' in y:
                             result.append(y['part'] + '; '.join(y['means']))
-                        else:
-                            result.append('; '.join(y['means']))
+                        elif 'means' in y:
+                            for m in y['means']:
+                                if 'means' in m:
+                                    result.append(m['part'] + '; '.join(m['means']))
+                                else:
+                                    result.append('; '.join(y['means']))
+                                    break
             elif 'trans_result' in res:
                 for x in res['trans_result']['data']:
                     result.append(x['dst'])
@@ -239,7 +253,7 @@ def _get_result(query, is_zh=''):
     except error.HTTPError:
         return 'Err:请求异常'
     except Exception as e:
-        return 'Err:产生异常: %s' % e
+        return 'Err:发生异常: %s' % e
 
 
 if __name__ == '__main__':

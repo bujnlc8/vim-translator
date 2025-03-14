@@ -59,7 +59,7 @@ def _get_result(query):
     except error.HTTPError:
         return 'Err:请求异常'
     except Exception as e:
-        return 'Err:产生异常: %s' % e
+        return 'Err:发生异常: %s' % e
 
 
 if __name__ == '__main__':

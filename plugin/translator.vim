@@ -102,8 +102,9 @@ function! s:create_popup_nvim(words, result)
                 \}
 
     let l:result = []
+    echo a:result
     for x in split(a:result, "\n")
-        call add(l:result, substitute(x, '\s', '', 'g'))
+        call add(l:result, x)
     endfor
 
     if len(a:words) < 132
@@ -154,7 +155,7 @@ function! s:create_popup(words, result)
                 \}
     let l:result = []
     for x in split(a:result, "\n")
-        call add(l:result, substitute(x, '\s', '', 'g'))
+        call add(l:result, x)
     endfor
     if len(a:words) < 132
         let l:winid = popup_create([a:words, '------------------------------------------------------------------'] + l:result, l:options)

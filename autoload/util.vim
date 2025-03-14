@@ -1,51 +1,62 @@
-function! util#base64(s)
-    if executable('base64')
-        return substitute(system('echo -n "'.a:s.'" | base64'), '\n', '', 'g')
-    elseif has('python')
-        let @b = a:s
-python << EOF
+function! util#base64(s) abort
+    if !has('python') && !has('python3')
+        throw 'Need Python support'
+    endif
+    try
+        if has('python3')
+            python3 << EOF
 import base64
 import vim
-res = base64.b64encode(vim.bindeval('@b'))
+s = vim.eval('a:s')
+res = base64.b64encode(s.encode('utf-8')).decode('utf-8')
 EOF
-    elseif has('python3')
-        let @b = a:s
-python3 << EOF
+            return py3eval('res')
+        else
+            python << EOF
 import base64
 import vim
-res = base64.b64encode(vim.bindeval('@b'))
+s = vim.eval('a:s')
+res = base64.b64encode(s)
 EOF
-    endif
-    if has('python')
-        return pyeval('res')
-    elseif has('python3')
-        return py3eval('res')
-    endif
+            return pyeval('res')
+        endif
+    catch /.*/
+        throw 'Base64 Error: ' . v:exception
+    endtry
 endfunction
 
-function! util#md5(s)
-    if executable('md5')
-        return substitute(system('echo -n "'.a:s.'" | md5'), '\n', '', 'g')
-    elseif executable('md5sum')
-        return substitute(system('echo -n "'.a:s.'" | md5sum'), '\n', '', 'g')
-    elseif has('python')
-        let @b = a:s
-python << EOF
+function! util#md5(s) abort
+    if !has('python') && !has('python3')
+        throw 'util#md5: Requires Vim with Python support'
+    endif
+
+    try
+        if has('python3')
+            python3 << EOF
 import hashlib
 import vim
-res = hashlib.md5(str(vim.bindeval('@b')).encode('utf-8')).hexdigest()
+
+try:
+    s = vim.eval('a:s')
+    md5 = hashlib.md5()
+    md5.update(s.encode('utf-8'))
+    res = md5.hexdigest()
+except UnicodeEncodeError:
+    res = hashlib.md5(s.encode('utf-8', errors='surrogateescape')).hexdigest()
 EOF
-    elseif has('python3')
-        let @b = a:s
-python3 << EOF
+            return py3eval('res')
+        else
+            python << EOF
 import hashlib
 import vim
-res = hashlib.md5(str(vim.bindeval('@b')).encode('utf-8')).hexdigest()
+s = vim.eval('a:s')
+if isinstance(s, unicode):
+    s = s.encode('utf-8')
+res = hashlib.md5(s).hexdigest()
 EOF
-    endif
-    if has('python')
-        return pyeval('res')
-    elseif has('python3')
-        return py3eval('res')
-    endif
+            return pyeval('res')
+        endif
+    catch /.*/
+        throw 'MD5Error: ' . v:exception
+    endtry
 endfunction
